@@ -1,0 +1,11 @@
+%{
+#include "hpp.hpp"
+%}
+%defines %union { Sym*o; }
+%token <o> SYM STR
+%type <o> ex scalar
+%%
+REPL : | REPL ex { W($2); } ;
+scalar : SYM | STR ;
+ex : scalar ;
+%%
