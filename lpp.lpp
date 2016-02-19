@@ -13,4 +13,20 @@ string LexString;
 					
 [a-zA-Z0-9_.]+		TOC(Sym,SYM)
 
+\(					TOC(Op,L)
+\)					TOC(Op,R)
+\[					TOC(Op,LQ)
+\]					TOC(Op,RQ)
+\{					TOC(Op,LB)
+\}					TOC(Op,RB)
+\,					TOC(Op,COMMA)
+
+\=					TOC(Op,EQ)
+\@					TOC(Op,AT)
+\:					TOC(Op,COLON)
+\%					TOC(Op,PERC)
+
+\+					TOC(Op,ADD)
+
+[ \t\r\n]+			{}
 %%

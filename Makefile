@@ -1,5 +1,6 @@
+.PHONY: log.log
 log.log: ./exe.exe src.src
-	./exe.exe < src.src > $@
+	./exe.exe < src.src > $@ && tail $(TAIL) $@
 C = cpp.cpp ypp.tab.cpp lex.yy.c
 H = hpp.hpp ypp.tab.hpp
 CXXFLAGS = -std=gnu++11

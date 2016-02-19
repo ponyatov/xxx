@@ -1,12 +1,19 @@
+[
 
-files = [ src.src log.log ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile ]
+fileio:class
+	%fs
+
+file:class,fileio
+	%dir
+
+files = [ file@src.src log.log ypp.ypp lpp.lpp hpp.hpp cpp.cpp Makefile ]
 skel = files + [ bat.bat .gitignore ]
 
 bat.bat = [ '@start .' '@gvim -p '+files ]
 
-Makefile = '
+Makefile = '.PHONY: log.log
 log.log: ./exe.exe src.src
-	./exe.exe < src.src > $@
+	./exe.exe < src.src > $@ && tail $(TAIL) $@
 C = cpp.cpp ypp.tab.cpp lex.yy.c
 H = hpp.hpp ypp.tab.hpp
 CXXFLAGS = -std=gnu++11
@@ -26,3 +33,5 @@ log.log
 ypp.tab.?pp
 lex.yy.c
 '
+
+]

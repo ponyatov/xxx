@@ -3,9 +3,33 @@
 %}
 %defines %union { Sym*o; }
 %token <o> SYM STR
-%type <o> ex scalar
+%token <o> L R LQ RQ LB RB COMMA
+%token <o> EQ AT COLON PERC
+%token <o> ADD SUB MUL DIV POW
+%type <o> ex scalar list tuple
+
+%left EQ
+%left ADD
+%left PERC
+%left COLON
+%left COMMA
 %%
-REPL : | REPL ex { W($2); } ;
-scalar : SYM | STR ;
-ex : scalar ;
+REPL	: | REPL ex			{ W($2->eval()); W("\n"); } ;
+scalar	: SYM | STR ;
+ex		: scalar
+		| tuple
+		| L ex R			{ $$=$2; }
+		| LQ list RQ		{ $$=$2; }
+		| ex EQ ex			{ $$=$2; $$->push($1); $$->push($3); }
+		| ex AT ex			{ $$=$2; $$->push($1); $$->push($3); }
+		| ex COLON ex		{ $$=$2; $$->push($1); $$->push($3); }
+		| ex PERC ex		{ $$=$2; $$->push($1); $$->push($3); }
+		| ex ADD ex			{ $$=$2; $$->push($1); $$->push($3); }
+;
+list	:					{ $$=new List(); }
+		| list ex			{ $$=$1; $$->push($2); }
+;
+tuple	: ex COMMA ex		{ $$=new List(); $$->push($1); $$->push($3); }
+		| tuple COMMA ex	{ $$=$1; $$->push($3); }
+;
 %%

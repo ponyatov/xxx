@@ -3,18 +3,33 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <vector>
+#include <map>
 using namespace std;
 
 struct Sym {
-	string val;
-	Sym(string);
-	string dump(); virtual string tagval(); string tagstr();
+	string tag,val;
+	Sym(string,string); Sym(string);
+	vector<Sym*> nest; void push(Sym*);
+	string dump(int depth=0); string pad(int);
+	virtual string tagval(); string tagstr();
+	Sym* lookup(string); void reg(string,Sym*);	// env lookup/register
+	virtual Sym* eval(); void nesteval();
+	virtual Sym* eq(Sym*);
+	virtual Sym* at(Sym*);
 };
+
+extern map<string,Sym*> env;
+extern void env_init();
 
 extern void W(Sym*);
 extern void W(string);
 
-struct Str: Sym { Str(string); string tagval(); };
+struct Str: Sym { Str(string); string tagval(); Sym*eval(); };
+
+struct List: Sym { List(); Sym*eval(); };
+
+struct Op: Sym { Op(string); Sym*eval(); };
 
 extern int yylex();
 extern int yylineno;
