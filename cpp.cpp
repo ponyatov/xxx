@@ -35,7 +35,7 @@ Sym* Sym::eval() {
 	Sym*E = lookup(val); if (E) return E; else reg(val,this);
 	nesteval(); return this; }
 
-Sym* Sym::eq(Sym*o) { Sym*R = new Sym("var",val); R->push(o); return R; }
+Sym* Sym::eq(Sym*o) { push(o); reg(val,this); return this; }
 Sym* Sym::at(Sym*o) { push(o); return this; }
 
 Str::Str(string V):Sym("str",V) {}

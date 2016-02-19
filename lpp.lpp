@@ -6,6 +6,8 @@ string LexString;
 %option yylineno
 %x lexstring
 %%
+#[^\n]*				{}
+
 '					{BEGIN(lexstring); LexString="";}
 <lexstring>'		{BEGIN(INITIAL); yylval.o=new Str(LexString); return STR;}
 <lexstring>\n		{LexString+=yytext[0];}
